@@ -37,7 +37,7 @@ direcciones = ["Calle Falsa 123", "Avenida Siempre Viva 456", "Pasaje Olvidado 7
 # Lista para almacenar las sentencias SQL
 sql_statements = []
 
-# Generar 700 registros aleatorios
+# Generar 700 
 for id_cliente in range(1,701):
     nombre = random.choice(nombres)
     apellido = random.choice(apellidos)

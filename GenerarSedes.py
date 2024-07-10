@@ -28,8 +28,8 @@ direcciones = [
 # Lista para almacenar las sentencias SQL
 sql_statements = []
 
-# Generar 50 registros aleatorios
-for id_sede in range(1, 51):  # Generamos 50 sedes
+# Generar 50 registros
+for id_sede in range(1, 51):  
     nombre_pelu = random.choice(nombres_pelu)
     direccion_pelu = random.choice(direcciones)
     region_pelu = random.choice(list(regiones_comunas.keys()))

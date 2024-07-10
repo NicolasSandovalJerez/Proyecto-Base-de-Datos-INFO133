@@ -228,19 +228,5 @@ plot_bar_and_save(df9, 'mes', 'num_citas', 'Peluquero que ha Trabajado Más por 
 
 # Cerrar la conexión
 conn.close()
+print("Datos cargados y gráficos generados")
 
-# Temporizador para la próxima carga de datos
-def countdown(t):
-    while t:
-        mins, secs = divmod(t, 60)
-        timeformat = '{:02d}:{:02d}'.format(mins, secs)
-        print(timeformat, end='\r')
-        time.sleep(1)
-        t -= 1
-    print('Iniciando próxima carga de datos...')
-
-# Definir tiempo para una semana (7 días en segundos)
-time_until_next_run = 7 * 24 * 60 * 60
-
-print("Datos cargados y gráficos generados. Esperando próxima carga de datos...")
-countdown(time_until_next_run)

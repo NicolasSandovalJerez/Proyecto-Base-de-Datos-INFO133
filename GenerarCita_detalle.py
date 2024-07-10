@@ -1,11 +1,9 @@
 import random
-
-# Asumimos que ya tenemos citas generadas
-num_citas = 75000  # El número de citas que generamos anteriormente
+num_citas = 75000  
 
 # Asumimos el número de servicios y productos
-num_servicios = 20  # Ajusta esto al número real de servicios que tienes
-num_productos = 50  # Ajusta esto al número real de productos que tienes
+num_servicios = 20  
+num_productos = 50  
 
 # Lista para almacenar las sentencias SQL
 sql_statements = []
@@ -25,7 +23,7 @@ for id_cita in range(1, num_citas + 1):
                 detalles_unicos.add((id_serv, id_prod))
                 break
         
-        cantidad = random.randint(1, 5)  # Asumimos que la cantidad puede ser entre 1 y 5
+        cantidad = random.randint(1, 5)  #cantidad puede ser entre 1 y 5
         
         # Construir la sentencia SQL para insertar el registro
         sql_statement = f"""INSERT INTO cita_detalle (id_cita, id_serv, id_prod, cantidad) VALUES ({id_cita}, {id_serv}, {id_prod}, {cantidad});"""

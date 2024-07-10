@@ -28,7 +28,7 @@ def generar_rut():
 # Lista para almacenar las sentencias SQL
 sql_statements = []
 
-# Generar 100 registros aleatorios
+# Generar 100 registros 
 for id_emple in range(1, 201): 
     nombre_emple = random.choice(nombres)
     apellido_emple = random.choice(apellidos)
@@ -38,7 +38,7 @@ for id_emple in range(1, 201):
     rut_emplea = generar_rut()
     cargo = random.choice(cargos)
     sueldo = random.randint(400000, 1500000)
-    id_sede = random.randint(1, 50)  # Asumiendo que tienes 50 sedes
+    id_sede = random.randint(1, 50)  
 
     # Construir la sentencia SQL para insertar el registro
     sql_statement = f"""INSERT INTO empleados (id_emple, nombre_emple, apellido_emple, direccion_emplea, comuna_emple, region_emplea, rut_emplea, cargo, sueldo, id_sede) VALUES ({id_emple}, '{nombre_emple}', '{apellido_emple}', '{direccion_emplea}', '{comuna_emple}', '{region_emplea}', '{rut_emplea}', '{cargo}', '{sueldo}', '{id_sede}');"""

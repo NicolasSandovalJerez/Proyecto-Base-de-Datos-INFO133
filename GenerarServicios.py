@@ -28,8 +28,8 @@ tipos_servicios = [
 sql_statements = []
 
 # Generar 20 registros
-for id_serv in range(1, 21):  # Generamos 20 servicios
-    tipo_serv = tipos_servicios[id_serv - 1]  # Usamos el índice para evitar repeticiones
+for id_serv in range(1, 21): 
+    tipo_serv = tipos_servicios[id_serv - 1]  
     
     # Generar un precio aleatorio entre $5000 y $100000
     precio_serv = random.randint(5000, 100000)

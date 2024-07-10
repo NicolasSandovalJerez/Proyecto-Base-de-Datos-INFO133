@@ -22,10 +22,10 @@ def generar_horas():
 # Lista para almacenar las sentencias SQL
 sql_statements = []
 
-# Generar 1500 citas aleatorias para cada sede
+# Generar 1500 citas 
 for id_sede in range(1, 51):  # 50 sedes
     for _ in range(1500):  # 1500 citas por sede
-        id_cita = len(sql_statements) + 1  # Incrementar id_cita
+        id_cita = len(sql_statements) + 1 
         id_emple = random.randint(1, 200)    
         id_cliente = random.randint(1, 700)  
         fecha_cita = generar_fecha()
