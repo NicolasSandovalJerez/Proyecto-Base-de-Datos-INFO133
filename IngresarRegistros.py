@@ -29,6 +29,7 @@ class AdminApp:
         self.create_tab(self.notebook, "Servicios", self.insertar_servicio)
         self.create_tab(self.notebook, "Productos", self.insertar_producto)
         self.create_tab(self.notebook, "Citas", self.insertar_cita)
+        self.create_tab(self.notebook, "Sedes", self.insertar_sede)
 
     def create_tab(self, notebook, title, command):
         frame = ttk.Frame(notebook, padding="10")
@@ -65,32 +66,31 @@ class AdminApp:
             messagebox.showerror("Error", "No hay conexión a la base de datos.")
             return
 
-        # Crear una nueva ventana para el formulario
         window = tk.Toplevel(self.master)
         window.title("Insertar Cliente")
 
-        # Campos del formulario
-        fields = ['ID', 'Nombre', 'Apellido', 'Dirección', 'Comuna', 'Región', 'Sexo', 'Fecha de Nacimiento', 'RUT']
+        fields = ['Nombre', 'Apellido', 'Dirección', 'Comuna', 'Región', 'Sexo (M/F)', 'Fecha Nacimiento (aaaa-mm-dd)', 'RUT (12345678-9)']
+        examples = ['', '', '', '', '', 'M/F', 'aaaa-mm-dd', '12345678-9']
         entries = []
 
-        for field in fields:
+        for field, example in zip(fields, examples):
             row = ttk.Frame(window)
             row.pack(fill=tk.X, padx=5, pady=5)
-            ttk.Label(row, text=field, width=20).pack(side=tk.LEFT)
+            ttk.Label(row, text=field, width=25).pack(side=tk.LEFT)
             entry = ttk.Entry(row)
+            entry.insert(0, example)  # Inserta el ejemplo en el Entry
             entry.pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
             entries.append(entry)
 
         ttk.Button(window, text="Insertar", command=lambda: self.submit_cliente(entries)).pack()
 
     def submit_cliente(self, entries):
-        # Obtener los valores de los campos
         values = [entry.get() for entry in entries]
 
         cursor = self.conexion.cursor()
         try:
             cursor.execute("""
-                INSERT INTO clientes (id_cliente, nombre_cliente, apellido_cliente, direccion_cliente, 
+                INSERT INTO clientes (nombre_cliente, apellido_cliente, direccion_cliente, 
                 comuna_cliente, region_cliente, sexo, fecha_nacimiento, rut_cliente)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id_cliente;
@@ -112,14 +112,16 @@ class AdminApp:
         window = tk.Toplevel(self.master)
         window.title("Insertar Empleado")
 
-        fields = ['ID', 'Nombre', 'Dirección', 'Comuna', 'Región', 'Apellido', 'RUT', 'Cargo', 'Sueldo', 'ID Sede']
+        fields = ['Nombre', 'Dirección', 'Comuna', 'Región', 'Apellido', 'RUT (12345678-9)', 'Cargo', 'Sueldo', 'ID Sede']
+        examples = ['', '', '', '', '', '12345678-9', '', '', '']
         entries = []
 
-        for field in fields:
+        for field, example in zip(fields, examples):
             row = ttk.Frame(window)
             row.pack(fill=tk.X, padx=5, pady=5)
-            ttk.Label(row, text=field, width=20).pack(side=tk.LEFT)
+            ttk.Label(row, text=field, width=25).pack(side=tk.LEFT)
             entry = ttk.Entry(row)
+            entry.insert(0, example)  # Inserta el ejemplo en el Entry
             entry.pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
             entries.append(entry)
 
@@ -131,8 +133,9 @@ class AdminApp:
         cursor = self.conexion.cursor()
         try:
             cursor.execute("""
-                INSERT INTO empleados (id_emple, nombre_emple, direccion_emplea, comuna_emple, region_emplea, apellido_emple, rut_emplea, cargo, sueldo, id_sede)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO empleados (nombre_emple, direccion_emplea, comuna_emple, region_emplea, 
+                apellido_emple, rut_emplea, cargo, sueldo, id_sede)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, (SELECT MAX(id_sede) FROM sede_pelu))
                 RETURNING id_emple;
             """, values)
             
@@ -152,14 +155,16 @@ class AdminApp:
         window = tk.Toplevel(self.master)
         window.title("Insertar Servicio")
 
-        fields = ['ID', 'Tipo', 'Precio']
+        fields = ['Tipo', 'Precio']
+        examples = ['', '']
         entries = []
 
-        for field in fields:
+        for field, example in zip(fields, examples):
             row = ttk.Frame(window)
             row.pack(fill=tk.X, padx=5, pady=5)
-            ttk.Label(row, text=field, width=20).pack(side=tk.LEFT)
+            ttk.Label(row, text=field, width=25).pack(side=tk.LEFT)
             entry = ttk.Entry(row)
+            entry.insert(0, example)  # Inserta el ejemplo en el Entry
             entry.pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
             entries.append(entry)
 
@@ -171,8 +176,8 @@ class AdminApp:
         cursor = self.conexion.cursor()
         try:
             cursor.execute("""
-                INSERT INTO servicio (id_serv, tipo_serv, precio_serv)
-                VALUES (%s, %s, %s)
+                INSERT INTO servicio (tipo_serv, precio_serv)
+                VALUES (%s, %s)
                 RETURNING id_serv;
             """, values)
             
@@ -192,14 +197,16 @@ class AdminApp:
         window = tk.Toplevel(self.master)
         window.title("Insertar Producto")
 
-        fields = ['ID', 'Nombre', 'Precio']
+        fields = ['Nombre', 'Precio']
+        examples = ['', '']
         entries = []
 
-        for field in fields:
+        for field, example in zip(fields, examples):
             row = ttk.Frame(window)
             row.pack(fill=tk.X, padx=5, pady=5)
-            ttk.Label(row, text=field, width=20).pack(side=tk.LEFT)
+            ttk.Label(row, text=field, width=25).pack(side=tk.LEFT)
             entry = ttk.Entry(row)
+            entry.insert(0, example)  # Inserta el ejemplo en el Entry
             entry.pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
             entries.append(entry)
 
@@ -211,8 +218,8 @@ class AdminApp:
         cursor = self.conexion.cursor()
         try:
             cursor.execute("""
-                INSERT INTO producto (id_prod, nombre_prod, precio_prod)
-                VALUES (%s, %s, %s)
+                INSERT INTO producto (nombre_prod, precio_prod)
+                VALUES (%s, %s)
                 RETURNING id_prod;
             """, values)
             
@@ -232,14 +239,16 @@ class AdminApp:
         window = tk.Toplevel(self.master)
         window.title("Insertar Cita")
 
-        fields = ['ID Cita', 'ID Sede', 'ID Empleado', 'ID Cliente', 'Hora Inicio', 'Hora Fin', 'Fecha Cita', 'Total']
+        fields = ['ID Sede', 'ID Empleado', 'ID Cliente', 'Hora de Inicio (hh:mm:ss)', 'Hora de Fin (hh:mm:ss)', 'Fecha de Cita (aaaa-mm-dd)', 'Total']
+        examples = ['', '', '', 'hh:mm:ss', 'hh:mm:ss', 'aaaa-mm-dd', '']
         entries = []
 
-        for field in fields:
+        for field, example in zip(fields, examples):
             row = ttk.Frame(window)
             row.pack(fill=tk.X, padx=5, pady=5)
-            ttk.Label(row, text=field, width=20).pack(side=tk.LEFT)
+            ttk.Label(row, text=field, width=25).pack(side=tk.LEFT)
             entry = ttk.Entry(row)
+            entry.insert(0, example)  # Inserta el ejemplo en el Entry
             entry.pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
             entries.append(entry)
 
@@ -251,8 +260,8 @@ class AdminApp:
         cursor = self.conexion.cursor()
         try:
             cursor.execute("""
-                INSERT INTO cita (id_cita, id_sede, id_emple, id_cliente, hora_inicio, hora_fin, fecha_cita, total)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO cita (id_sede, id_emple, id_cliente, hora_inicio, hora_fin, fecha_cita, total)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
                 RETURNING id_cita;
             """, values)
             
@@ -264,7 +273,52 @@ class AdminApp:
         finally:
             cursor.close()
 
-if __name__ == "__main__":
+    def insertar_sede(self):
+        if not self.conexion:
+            messagebox.showerror("Error", "No hay conexión a la base de datos.")
+            return
+
+        window = tk.Toplevel(self.master)
+        window.title("Insertar Sede")
+
+        fields = ['Nombre', 'Dirección', 'Comuna', 'Región']
+        examples = ['', '', '', '']
+        entries = []
+
+        for field, example in zip(fields, examples):
+            row = ttk.Frame(window)
+            row.pack(fill=tk.X, padx=5, pady=5)
+            ttk.Label(row, text=field, width=25).pack(side=tk.LEFT)
+            entry = ttk.Entry(row)
+            entry.insert(0, example)  # Inserta el ejemplo en el Entry
+            entry.pack(side=tk.RIGHT, expand=tk.YES, fill=tk.X)
+            entries.append(entry)
+
+        ttk.Button(window, text="Insertar", command=lambda: self.submit_sede(entries)).pack()
+
+    def submit_sede(self, entries):
+        values = [entry.get() for entry in entries]
+
+        cursor = self.conexion.cursor()
+        try:
+            cursor.execute("""
+                INSERT INTO sede_pelu (nombre_pelu, direccion_pelu, comuna_pelu, region_pelu)
+                VALUES (%s, %s, %s, %s)
+                RETURNING id_sede;
+            """, values)
+            
+            id_sede = cursor.fetchone()[0]
+            self.conexion.commit()
+            messagebox.showinfo("Éxito", f"Sede insertada con ID: {id_sede}")
+        except (Exception, psycopg2.Error) as error:
+            messagebox.showerror("Error", f"Error al insertar sede: {error}")
+        finally:
+            cursor.close()
+
+def main():
     root = tk.Tk()
     app = AdminApp(root)
     root.mainloop()
+
+if __name__ == "__main__":
+    main()

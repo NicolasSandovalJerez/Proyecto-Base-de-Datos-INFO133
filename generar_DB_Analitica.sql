@@ -1,11 +1,3 @@
--- DROP SCHEMA public;
-
-CREATE SCHEMA public AUTHORIZATION pg_database_owner;
--- public.dimclientes definition
-
--- Drop table
-
--- DROP TABLE public.dimclientes;
 
 CREATE TABLE public.dimclientes (
 	id_cliente int4 NOT NULL,

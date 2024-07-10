@@ -1,17 +1,19 @@
---1-----------------------------------------------------
-SELECT 
+--1 horario con más citas durante el día por peluquería, identificando la comuna -----------------------------------------------------
+SELECT DISTINCT ON (id_sede)
+    id_sede,
+    hora_inicio as Horario_pick,
     comuna_pelu,
-    hora_inicio,
     COUNT(id_cita) AS num_citas
-FROM 
+FROM
     FactCitas
-GROUP BY 
-    comuna_pelu, 
-    hora_inicio
-ORDER BY 
-    comuna_pelu, 
-    num_citas DESC;
---2-----------------------------------------------------
+GROUP BY
+    id_sede,
+    hora_inicio,
+    comuna_pelu
+ORDER BY
+    id_sede,
+    COUNT(id_cita) DESC;
+--2 lista de clientes que gastan más dinero por peluquería, indicando comuna del cliente y de peluquería, además de cuanto gasto -----------------------------------------------------
    SELECT 
     F.id_cliente,
     C.comuna_cliente,
@@ -27,7 +29,7 @@ GROUP BY
     F.comuna_pelu
 ORDER BY 
     total_gasto DESC;
---3-----------------------------------------------------
+--3 lista de peluqueros que ha ganado más por mes durante el 2023, esto por peluquería -----------------------------------------------------
 SELECT 
     E.id_emple,
     E.nombre_emple,
@@ -48,7 +50,7 @@ GROUP BY
 ORDER BY 
     total_ganado DESC;
 
---4-----------------------------------------------------
+--4 lista de clientes hombres que se cortan el pelo y la barba -----------------------------------------------------
 SELECT DISTINCT 
     C.id_cliente,
     C.nombre_cliente,
@@ -58,12 +60,12 @@ FROM
 JOIN 
     DimClientes C ON F.id_cliente = C.id_cliente
 JOIN 
-    DimServicios S ON F.id_sede = S.id_serv -- Asumiendo que se relaciona por id_sede (cámbialo si es necesario)
+    DimServicios S ON F.id_sede = S.id_serv 
 WHERE 
     C.sexo = 'M' 
     AND S.id_serv IN (1, 3);
 
---6-----------------------------------------------------
+--6 identificar el horario más concurrido por peluquería durante el 2019 y 2020, desagregados por mes -----------------------------------------------------
 SELECT 
     id_sede,
     año,
@@ -96,7 +98,7 @@ ORDER BY
     mes;
 
 
---7-----------------------------------------------------
+--7 identificar al cliente que ha tenido las citas más largas por peluquería, por mes-----------------------------------------------------
 SELECT 
     id_cliente,
     id_sede,
@@ -114,7 +116,7 @@ ORDER BY
 
 --8-----------------------------------------------------
 
---9-----------------------------------------------------
+--9 identificar al peluquero que ha trabajado más por mes durante el 2019-----------------------------------------------------
 WITH RankedCitas AS (
     SELECT 
         id_emple,
@@ -140,7 +142,34 @@ WHERE
 ORDER BY 
     mes;
 
---10-----------------------------------------------------
-
+--10 identificar lista clientes de totales por comuna, cantidad de peluquerías, cantidad de clientes residentes en la comuna-----------------------------------------------------
+WITH PeluqueriasPorComuna AS (
+    SELECT 
+        comuna_pelu,
+        COUNT(DISTINCT id_sede) AS cantidad_peluquerias
+    FROM 
+        factcitas
+    GROUP BY 
+        comuna_pelu
+),
+ClientesPorComuna AS (
+    SELECT 
+        comuna_cliente,
+        COUNT(DISTINCT id_cliente) AS cantidad_clientes_residentes
+    FROM 
+        dimclientes
+    GROUP BY 
+        comuna_cliente
+)
+SELECT 
+    COALESCE(pc.comuna_pelu, cc.comuna_cliente) AS comuna,
+    COALESCE(pc.cantidad_peluquerias, 0) AS cantidad_peluquerias,
+    COALESCE(cc.cantidad_clientes_residentes, 0) AS cantidad_clientes_residentes
+FROM 
+    PeluqueriasPorComuna pc
+FULL OUTER JOIN 
+    ClientesPorComuna cc ON pc.comuna_pelu = cc.comuna_cliente
+ORDER BY 
+    comuna;
 
 
