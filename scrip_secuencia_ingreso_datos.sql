@@ -1,0 +1,18 @@
+CREATE SEQUENCE clientes_id_seq;
+CREATE SEQUENCE producto_id_seq;
+CREATE SEQUENCE sede_pelu_id_seq;
+CREATE SEQUENCE servicio_id_seq;
+CREATE SEQUENCE empleados_id_seq;
+CREATE SEQUENCE cita_id_seq;
+SELECT setval('clientes_id_seq', (SELECT MAX(id_cliente) FROM clientes));
+SELECT setval('producto_id_seq', (SELECT MAX(id_prod) FROM producto));
+SELECT setval('sede_pelu_id_seq', (SELECT MAX(id_sede) FROM sede_pelu));
+SELECT setval('servicio_id_seq', (SELECT MAX(id_serv) FROM servicio));
+SELECT setval('empleados_id_seq', (SELECT MAX(id_emple) FROM empleados));
+SELECT setval('cita_id_seq', (SELECT MAX(id_cita) FROM cita));
+ALTER TABLE clientes ALTER COLUMN id_cliente SET DEFAULT nextval('clientes_id_seq');
+ALTER TABLE producto ALTER COLUMN id_prod SET DEFAULT nextval('producto_id_seq');
+ALTER TABLE sede_pelu ALTER COLUMN id_sede SET DEFAULT nextval('sede_pelu_id_seq');
+ALTER TABLE servicio ALTER COLUMN id_serv SET DEFAULT nextval('servicio_id_seq');
+ALTER TABLE empleados ALTER COLUMN id_emple SET DEFAULT nextval('empleados_id_seq');
+ALTER TABLE cita ALTER COLUMN id_cita SET DEFAULT nextval('cita_id_seq');
